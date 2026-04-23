@@ -39,3 +39,22 @@ vercel --prod
 ```
 
 또는 GitHub 연동 후 Vercel에서 Import 하세요.
+
+
+## Vercel 오류 트러블슈팅
+
+오류: `빌드가 완료된 후 "public"이라는 이름의 출력 디렉터리를 찾을 수 없습니다.`
+
+원인:
+- Vercel 프로젝트의 Framework Preset이 `Next.js`가 아니라 `Other`로 잡혀 있거나,
+- Output Directory가 `public`으로 강제 설정된 상태입니다.
+
+해결:
+1. Vercel 프로젝트 Settings → Build and Deployment로 이동
+2. **Framework Preset = Next.js** 로 변경
+3. **Output Directory 값을 비움(기본값 사용)**
+4. Root Directory는 저장소 루트(`/`)로 설정
+5. Environment Variables에 `OPENAI_API_KEY` 추가
+6. Redeploy 실행
+
+추가로 저장소에 `vercel.json`을 넣어 Framework를 `nextjs`로 명시했습니다.
