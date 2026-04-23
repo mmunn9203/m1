@@ -1,7 +1,6 @@
 'use client';
 
 import { useState } from 'react';
-import './globals.css';
 
 export default function HomePage() {
   const [content, setContent] = useState('서비스 소개\n문제 정의\n핵심 기능\n기대 효과\n로드맵');
@@ -24,19 +23,15 @@ export default function HomePage() {
         throw new Error(payload.error || '생성 실패');
       }
 
-      const disposition = res.headers.get('Content-Disposition') || '';
-      const fileNameMatch = disposition.match(/filename="(.+)"/);
-      const fileName = fileNameMatch ? fileNameMatch[1] : 'proposal-c.pptx';
-      const previewHeader = res.headers.get('X-Preview-Images');
-      if (previewHeader) {
-        try {
-          setPreviewImages(JSON.parse(decodeURIComponent(previewHeader)));
-        } catch {
-          setPreviewImages([]);
-        }
-      }
+      const payload = await res.json();
+      const fileName = payload.fileName || 'proposal-c.pptx';
+      setPreviewImages(payload.previews || []);
 
-      const blob = await res.blob();
+      const mime = 'application/vnd.openxmlformats-officedocument.presentationml.presentation';
+      const byteChars = atob(payload.pptxBase64);
+      const byteNums = new Array(byteChars.length);
+      for (let i = 0; i < byteChars.length; i += 1) byteNums[i] = byteChars.charCodeAt(i);
+      const blob = new Blob([new Uint8Array(byteNums)], { type: mime });
       const url = URL.createObjectURL(blob);
       const a = document.createElement('a');
       a.href = url;

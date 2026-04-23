@@ -1,3 +1,5 @@
+import './globals.css';
+
 export const metadata = {
   title: 'Proposal C Slide Generator',
   description: 'Generate editable PPTX slides from text input',

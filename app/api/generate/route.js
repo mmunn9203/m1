@@ -56,12 +56,10 @@ export async function POST(req) {
 
     const buffer = await buildPpt(blueprint);
 
-    return new NextResponse(buffer, {
-      headers: {
-        'Content-Type': 'application/vnd.openxmlformats-officedocument.presentationml.presentation',
-        'Content-Disposition': `attachment; filename="proposal-c-${Date.now()}.pptx"`,
-        'X-Preview-Images': encodeURIComponent(JSON.stringify(previews)),
-      },
+    return NextResponse.json({
+      fileName: `proposal-c-${Date.now()}.pptx`,
+      pptxBase64: Buffer.from(buffer).toString('base64'),
+      previews,
     });
   } catch (error) {
     return NextResponse.json({ error: error.message || '서버 오류' }, { status: 500 });
