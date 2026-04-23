@@ -58,3 +58,6 @@ vercel --prod
 6. Redeploy 실행
 
 추가로 저장소에 `vercel.json`을 넣어 Framework를 `nextjs`로 명시했습니다.
+
+
+`vercel.json`에도 `outputDirectory: ".next"`를 명시해 두었습니다.
