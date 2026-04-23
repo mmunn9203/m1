@@ -43,3 +43,18 @@ vercel --prod
 1. Vercel 프로젝트를 한 번 생성/연결합니다.
 2. GitHub 저장소 > Settings > Secrets and variables > Actions에 위 3개 시크릿을 등록합니다.
 3. `main`에 push 하거나 Actions 탭에서 수동 실행(`workflow_dispatch`)합니다.
+
+
+## 404 (NOT_FOUND) 해결
+
+Vercel에서 `404: NOT_FOUND`가 뜨면 대부분 아래 원인입니다.
+
+1. GitHub Actions 시크릿(`VERCEL_TOKEN`, `VERCEL_ORG_ID`, `VERCEL_PROJECT_ID`) 누락
+2. `main` 배포가 아직 없는데 프로덕션 URL로 접근
+3. 라우팅 설정 부재로 인해 서브 경로 접근 시 404
+
+확인 순서:
+
+- GitHub Actions 실행 로그에서 `vercel pull/build/deploy` 성공 여부 확인
+- 실패했다면 시크릿 3개를 다시 등록 후 재실행
+- 워크플로가 성공했다면 로그 마지막의 배포 URL(`*.vercel.app`)로 먼저 접속
