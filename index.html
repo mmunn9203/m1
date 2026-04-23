@@ -1,0 +1,52 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>점심메뉴 추천</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <main class="container">
+    <h1>🍱 점심메뉴 추천기</h1>
+    <p class="subtitle">기분, 예산, 매운맛 취향으로 오늘 점심을 골라보세요.</p>
+
+    <section class="controls" aria-label="추천 옵션">
+      <label>
+        기분
+        <select id="mood">
+          <option value="든든한">든든한</option>
+          <option value="가벼운">가벼운</option>
+          <option value="새로운">새로운</option>
+          <option value="빠른">빠른</option>
+        </select>
+      </label>
+
+      <label>
+        예산
+        <select id="budget">
+          <option value="저렴한">저렴한(1만원 이하)</option>
+          <option value="보통">보통(1만~1만5천원)</option>
+          <option value="여유로운">여유로운(1만5천원 이상)</option>
+        </select>
+      </label>
+
+      <label>
+        매운맛
+        <input id="spicy" type="range" min="0" max="2" value="1" />
+        <span id="spicyLabel">보통</span>
+      </label>
+
+      <button id="recommendBtn" type="button">메뉴 추천받기</button>
+    </section>
+
+    <section class="result" aria-live="polite">
+      <h2>오늘의 추천</h2>
+      <p id="menuName">버튼을 눌러 추천을 받아보세요!</p>
+      <p id="menuDesc" class="desc"></p>
+    </section>
+  </main>
+
+  <script src="script.js"></script>
+</body>
+</html>
