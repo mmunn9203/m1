@@ -26,3 +26,20 @@ vercel --prod
 ```
 
 `vercel.json`이 포함되어 있어 정적 사이트로 바로 배포됩니다.
+
+
+## GitHub Actions 자동배포
+
+`main` 브랜치에 push 하면 Vercel에 자동으로 배포되도록 워크플로를 추가했습니다.
+
+필수 GitHub Secrets:
+
+- `VERCEL_TOKEN`: Vercel Personal/Team Token
+- `VERCEL_ORG_ID`: Vercel Team 또는 개인 계정 ID
+- `VERCEL_PROJECT_ID`: Vercel Project ID
+
+설정 방법:
+
+1. Vercel 프로젝트를 한 번 생성/연결합니다.
+2. GitHub 저장소 > Settings > Secrets and variables > Actions에 위 3개 시크릿을 등록합니다.
+3. `main`에 push 하거나 Actions 탭에서 수동 실행(`workflow_dispatch`)합니다.
