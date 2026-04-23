@@ -61,3 +61,8 @@ vercel --prod
 
 
 `vercel.json`에도 `outputDirectory: ".next"`를 명시해 두었습니다.
+
+
+## 보안 공지
+
+Vercel 경고(취약한 Next.js 버전 감지)에 대응해 `next` 버전을 보안 패치 포함 버전으로 상향했습니다.
