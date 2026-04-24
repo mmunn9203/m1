@@ -7,36 +7,46 @@ export const dynamic = 'force-dynamic';
 export const revalidate = 0;
 
 function fallbackBlueprint(content) {
-  const points = content
+  const lines = content
     .split(/\n+/)
     .map((v) => v.trim())
     .filter(Boolean);
 
-  return [
-    {
-      title: points[0] || '제안 개요',
-      subtitle: '자동 생성된 구조 (fallback)',
-      bullets: points.slice(0, 5),
+  const chunks = lines.length > 0 ? lines : [content.trim() || '제안 개요'];
+  const slides = chunks.slice(0, 5).map((topic, idx) => {
+    const next = chunks[idx + 1] || '세부 실행 항목';
+    const next2 = chunks[idx + 2] || '기대 성과';
+
+    return {
+      title: topic.slice(0, 42),
+      subtitle: `로컬 fallback 자동 구성 · section ${idx + 1}`,
+      bullets: [
+        `${topic} 핵심 맥락 정리`,
+        `${next} 실행 방안`,
+        `${next2} 측정 지표`,
+      ],
       cards: [
-        { title: '문제', body: points[0] || '핵심 문제 정의' },
-        { title: '해결', body: points[1] || '해결 전략' },
-        { title: '효과', body: points[2] || '기대 효과' },
+        { title: '핵심 과제', body: topic },
+        { title: '실행 액션', body: next },
+        { title: '예상 효과', body: next2 },
       ],
       kpi: [
-        { label: '도입기간', value: '4주' },
-        { label: '효율개선', value: '+32%' },
-        { label: '만족도', value: '4.8/5' },
+        { label: '우선순위', value: `${idx + 1}` },
+        { label: '완료율 목표', value: `${70 + idx * 5}%` },
+        { label: '리뷰주기', value: '주간' },
       ],
       table: {
-        headers: ['단계', '내용', '기간'],
+        headers: ['구분', '내용', '비고'],
         rows: [
-          ['1', '기획', '1주'],
-          ['2', '디자인', '2주'],
-          ['3', '구현', '1주'],
+          ['요약', topic.slice(0, 24), '필수'],
+          ['실행', next.slice(0, 24), '중요'],
+          ['성과', next2.slice(0, 24), '추적'],
         ],
       },
-    },
-  ];
+    };
+  });
+
+  return slides;
 }
 
 function buildEnvDiagnostics() {

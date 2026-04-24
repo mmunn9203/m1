@@ -12,6 +12,8 @@ export default function HomePage() {
   const handleGenerate = async () => {
     setLoading(true);
     setError('');
+    setPreviewImages([]);
+    setMeta((prev) => ({ ...prev, sourcePreview: content.slice(0, 120) }));
     try {
       const res = await fetch('/api/generate', {
         method: 'POST',
