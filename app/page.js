@@ -7,7 +7,7 @@ export default function HomePage() {
   const [loading, setLoading] = useState(false);
   const [previewImages, setPreviewImages] = useState([]);
   const [error, setError] = useState('');
-  const [meta, setMeta] = useState({ usedFallback: false, warning: '', sourcePreview: '' });
+  const [meta, setMeta] = useState({ usedFallback: false, warning: '', sourcePreview: '', diagnostics: null });
 
   const handleGenerate = async () => {
     setLoading(true);
@@ -22,6 +22,7 @@ export default function HomePage() {
 
       if (!res.ok) {
         const payload = await res.json();
+        setMeta((prev) => ({ ...prev, diagnostics: payload.diagnostics || null }));
         throw new Error(payload.error || '생성 실패');
       }
 
@@ -32,6 +33,7 @@ export default function HomePage() {
         usedFallback: Boolean(payload.usedFallback),
         warning: payload.warning || '',
         sourcePreview: payload.sourcePreview || '',
+        diagnostics: null,
       });
 
       const mime = 'application/vnd.openxmlformats-officedocument.presentationml.presentation';
@@ -70,6 +72,11 @@ export default function HomePage() {
           {loading ? '생성 중...' : 'PPTX 생성하기'}
         </button>
         {error && <p style={{ color: '#b91c1c' }}>{error}</p>}
+        {error && meta.diagnostics && (
+          <pre className="code" style={{ marginTop: 8, whiteSpace: 'pre-wrap' }}>
+            {JSON.stringify(meta.diagnostics, null, 2)}
+          </pre>
+        )}
         {!error && meta.sourcePreview && (
           <p style={{ color: '#334155', marginTop: 10 }}>
             입력 반영 확인: <strong>{meta.sourcePreview}</strong>

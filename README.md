@@ -77,3 +77,6 @@ Vercel에서 키를 넣었는데도 `OPENAI_API_KEY가 설정되어야 합니다
 3. 프로젝트를 잘못 연결해서(다른 Vercel Project) 다른 환경변수를 보고 있는 경우
 
 권장: `Production`, `Preview`, `Development` 3개 모두에 `OPENAI_API_KEY`를 설정하고 재배포하세요.
+
+
+참고: 서버는 `OPENAI_API_KEY`를 우선 사용하며, 없으면 `OPENAI_KEY` 또는 `OPENAI_APIKEY`도 대체로 인식합니다.
