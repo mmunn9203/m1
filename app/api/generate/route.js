@@ -1,6 +1,6 @@
 import { NextResponse } from 'next/server';
 import { buildPpt } from '@/lib/pptBuilder';
-import { generateDraftImages, generateSlideBlueprint } from '@/lib/openai';
+import { generateDraftImages, generateSlideBlueprint, hasOpenAIKey } from '@/lib/openai';
 
 export const runtime = 'nodejs';
 export const dynamic = 'force-dynamic';
@@ -48,6 +48,16 @@ export async function POST(req) {
       return NextResponse.json({ error: '내용을 입력해 주세요.' }, { status: 400 });
     }
 
+    if (!hasOpenAIKey()) {
+      return NextResponse.json(
+        {
+          error:
+            'OPENAI_API_KEY를 서버 런타임에서 읽지 못했습니다. Vercel 프로젝트의 Environment Variables에서 OPENAI_API_KEY를 Production/Preview 모두에 등록하고 재배포해 주세요.',
+        },
+        { status: 500 },
+      );
+    }
+
     let blueprint;
     let previews = [];
     let usedFallback = false;
@@ -57,8 +67,12 @@ export async function POST(req) {
       blueprint = await generateSlideBlueprint(normalizedContent);
       previews = await generateDraftImages(blueprint);
     } catch (err) {
+      const message = err?.message || '';
+      if (message.includes('OPENAI_API_KEY')) {
+        return NextResponse.json({ error: message }, { status: 500 });
+      }
       usedFallback = true;
-      warning = err?.message || 'AI 생성 실패로 fallback이 사용되었습니다.';
+      warning = message || 'AI 생성 실패로 fallback이 사용되었습니다.';
       blueprint = fallbackBlueprint(normalizedContent);
     }
 

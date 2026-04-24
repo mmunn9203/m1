@@ -66,3 +66,14 @@ vercel --prod
 ## 보안 공지
 
 Vercel 경고(취약한 Next.js 버전 감지)에 대응해 `next` 버전을 보안 패치 포함 버전으로 상향했습니다.
+
+
+### OPENAI_API_KEY 관련 자주 발생하는 원인
+
+Vercel에서 키를 넣었는데도 `OPENAI_API_KEY가 설정되어야 합니다`가 뜨면 대부분 아래 케이스입니다.
+
+1. Environment Variable을 **Production만** 넣고 Preview에는 안 넣은 경우
+2. 값을 추가한 뒤 **재배포(Redeploy)**를 안 한 경우
+3. 프로젝트를 잘못 연결해서(다른 Vercel Project) 다른 환경변수를 보고 있는 경우
+
+권장: `Production`, `Preview`, `Development` 3개 모두에 `OPENAI_API_KEY`를 설정하고 재배포하세요.
