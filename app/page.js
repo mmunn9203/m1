@@ -7,6 +7,7 @@ export default function HomePage() {
   const [loading, setLoading] = useState(false);
   const [previewImages, setPreviewImages] = useState([]);
   const [error, setError] = useState('');
+  const [meta, setMeta] = useState({ usedFallback: false, warning: '', sourcePreview: '' });
 
   const handleGenerate = async () => {
     setLoading(true);
@@ -14,6 +15,7 @@ export default function HomePage() {
     try {
       const res = await fetch('/api/generate', {
         method: 'POST',
+        cache: 'no-store',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ content }),
       });
@@ -26,6 +28,11 @@ export default function HomePage() {
       const payload = await res.json();
       const fileName = payload.fileName || 'proposal-c.pptx';
       setPreviewImages(payload.previews || []);
+      setMeta({
+        usedFallback: Boolean(payload.usedFallback),
+        warning: payload.warning || '',
+        sourcePreview: payload.sourcePreview || '',
+      });
 
       const mime = 'application/vnd.openxmlformats-officedocument.presentationml.presentation';
       const byteChars = atob(payload.pptxBase64);
@@ -63,6 +70,16 @@ export default function HomePage() {
           {loading ? '생성 중...' : 'PPTX 생성하기'}
         </button>
         {error && <p style={{ color: '#b91c1c' }}>{error}</p>}
+        {!error && meta.sourcePreview && (
+          <p style={{ color: '#334155', marginTop: 10 }}>
+            입력 반영 확인: <strong>{meta.sourcePreview}</strong>
+          </p>
+        )}
+        {!error && meta.usedFallback && (
+          <p style={{ color: '#b45309', marginTop: 6 }}>
+            AI 생성 실패로 fallback이 적용되었습니다. {meta.warning}
+          </p>
+        )}
       </section>
 
       {previewImages.length > 0 && (
